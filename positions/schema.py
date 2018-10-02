@@ -20,3 +20,22 @@ class Query(graphene.ObjectType):
 
     def resolve_positions(self, info, **kwargs):
         return store.positions
+
+
+class ProcessTrade(graphene.Mutation):
+    positions = graphene.List(PositionType)
+
+    class Arguments:
+        pass
+
+    def mutate(self, info, **kwargs):
+        # Process trades
+        store.process_trades()
+
+        return ProcessTrade(
+            positions=store.positions
+        )
+
+
+class Mutation(graphene.ObjectType):
+    process_trade = ProcessTrade.Field()

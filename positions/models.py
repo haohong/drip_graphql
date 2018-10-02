@@ -39,6 +39,14 @@ class Position(models.Model):
     def profit_loss(self):
         return (self.current_price - self.purchase_price) * self.quantity
 
+    def sell(self, trade):
+        self.quantity -= trade.quantity
+
+    def buy(self, trade):
+        self.purchase_price = (self.purchase_price *
+                               self.quantity + trade.price * trade.quantity) / (self.quantity + trade.quantity)
+        self.quantity += trade.quantity
+
 
 class Price(models.Model):
     symbol = models.CharField(max_length=10)

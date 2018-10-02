@@ -58,5 +58,26 @@ class DataStore:
     def total_market_value(self):
         return sum(position.market_value for position in self.positions)
 
+    def process_trade(self, trade):
+        """
+        Process trade
+        """
+
+        from .models import Trade
+
+        position = next(p for p in self.positions if p.symbol == trade.symbol)
+        if trade.side == Trade.TRADE_SIDE_SELL:
+            position.sell(trade)
+        elif trade.side == Trade.TRADE_SIDE_BUY:
+            position.buy(trade)
+
+    def process_trades(self):
+        """
+        Process trades
+        """
+
+        for trade in self.trades:
+            self.process_trade(trade)
+
 
 store = DataStore()
