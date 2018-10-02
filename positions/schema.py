@@ -22,7 +22,7 @@ class Query(graphene.ObjectType):
         return store.positions
 
 
-class ProcessTrade(graphene.Mutation):
+class ProcessTrades(graphene.Mutation):
     positions = graphene.List(PositionType)
 
     class Arguments:
@@ -32,10 +32,10 @@ class ProcessTrade(graphene.Mutation):
         # Process trades
         store.process_trades()
 
-        return ProcessTrade(
+        return ProcessTrades(
             positions=store.positions
         )
 
 
 class Mutation(graphene.ObjectType):
-    process_trade = ProcessTrade.Field()
+    process_trades = ProcessTrades.Field()
