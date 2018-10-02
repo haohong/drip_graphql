@@ -43,5 +43,20 @@ class DataStore:
 
         self.trades = import_csv_into_models(self.TRADE_CSV, Trade)
 
+    def get_price_of_symbol(self, symbol):
+        """
+        Find current price of the symbol
+        """
+
+        # Find price object
+        price = next((p for p in self.prices if p.symbol == symbol), None)
+
+        # Return current price if found, else return None
+        return getattr(price, 'price', None)
+
+    @property
+    def total_market_value(self):
+        return sum(position.market_value for position in self.positions)
+
 
 store = DataStore()

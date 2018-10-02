@@ -1,5 +1,7 @@
 from django.db import models
 
+from .store import store
+
 
 class Position(models.Model):
     symbol = models.CharField(max_length=10)
@@ -17,6 +19,25 @@ class Position(models.Model):
             quantity=float(data['quantity']),
             purchase_price=float(data['purchase_price']),
         )
+
+    @property
+    def current_price(self):
+        price = store.get_price_of_symbol(self.symbol)
+
+        # Return current price if found, else return purchase price
+        return price or self.purchase_price
+
+    @property
+    def market_value(self):
+        return self.quantity * self.current_price
+
+    @property
+    def portfolio_percent(self):
+        return self.market_value / store.total_market_value
+
+    @property
+    def profit_loss(self):
+        return (self.current_price - self.purchase_price) * self.quantity
 
 
 class Price(models.Model):
