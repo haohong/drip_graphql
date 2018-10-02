@@ -42,3 +42,6 @@ class DataStore:
         from .models import Trade
 
         self.trades = import_csv_into_models(self.TRADE_CSV, Trade)
+
+
+store = DataStore()
